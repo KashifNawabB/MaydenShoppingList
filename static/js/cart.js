@@ -33,13 +33,14 @@ $(document).ready(function() {
 
 // MARK/UNMARK ITEM AS BOUGHT
 $(document).ready(function() {
+        // handle checkbox change state
         $('.mark-bought').on('change', function() {
             const checkbox = $(this);
             const productId = checkbox.data('product-id');
             const isBought = checkbox.is(':checked');
 
             $.ajax({
-                url: '/mark-as-bought/',  // Update the URL to your backend endpoint
+                url: '/mark-as-bought/',
                 method: 'POST',
                 data: JSON.stringify({ 'product_id': productId, 'bought': isBought }),
                 contentType: 'application/json',
@@ -49,7 +50,7 @@ $(document).ready(function() {
                 success: function(response) {
                     if (response.success) {
                         if (isBought) {
-                            // If the item is marked as bought, change the background color to gray
+                            // If the item is marked as bought, change the background color
                             checkbox.closest('.row').addClass('bg-success-subtle');
 
                             // Disable the number input field
@@ -62,7 +63,7 @@ $(document).ready(function() {
                             checkbox.closest('.row').find('input[type="number"]').prop('disabled', false).removeClass('disabled-field');
                         }
                     } else {
-                        // Optionally, handle the case where the server returns an error
+                        // handles the case where the server returns an error
                         showPopup('Failed to update item status.', 'error');
                     }
                 },
@@ -76,14 +77,14 @@ $(document).ready(function() {
 
 // INCREASE/DECREASE ITEM QUANTITY IN CART
 $(document).ready(function() {
-    // Attach an event listener to the quantity input fields]
+    // Attaching an event listener to the quantity input fields
     $('.quantity-input').on('change', function() {
         const $input = $(this);
         const newQuantity = $input.val(); // Get the new quantity
         const productId = $input.parent().data('product-id'); // Get the item ID from the closest parent row
 
         $.ajax({
-            url: '/update-quantity/', // URL to your update quantity view
+            url: '/update-quantity/',
             method: 'POST',
             data: JSON.stringify({
                 'product_id': productId,
@@ -95,7 +96,7 @@ $(document).ready(function() {
             },
             success: function(response) {
                 if (response.success) {
-                    expense_update(response);
+                    expense_update(response); // update expenses i.e. total price, exceeding amount
                     showPopup('Quantity updated successfully.', 'success');
                 } else {
                     showPopup('Failed to update quantity.', 'error');
@@ -108,7 +109,7 @@ $(document).ready(function() {
     });
 });
 
-//UPDATE TOTAL PRICE AND EXCEEDING AMOUNT
+//UTILITY FUNCTION TO UPDATE TOTAL PRICE AND EXCEEDING AMOUNT
 function expense_update(response) {
         $('#total-price').text(response.total_price);
         if(response.exceeds_limit){
@@ -137,12 +138,12 @@ document.addEventListener('DOMContentLoaded', function() {
             });
             // Send AJAX request to update order in the backend
             $.ajax({
-                url: '/update-cart-order/', // Ensure this URL is correct
+                url: '/update-cart-order/',
                 method: 'POST',
                 data: JSON.stringify({order: order}),
                 contentType: 'application/json',
                 headers: {
-                    'X-CSRFToken': getCSRFToken() // Ensure CSRF protection
+                    'X-CSRFToken': getCSRFToken() // get CSRF token for security
                 },
                 success: function(response) {
                     if (response.success) {
@@ -180,6 +181,7 @@ $(document).ready(function() {
             success: function(response) {
                 if (response.success) {
                     $('#shareCartMessage').html('<div class="alert alert-success">Cart shared successfully!</div>');
+                    $('#email').val('');
                 } else {
                     $('#shareCartMessage').html('<div class="alert alert-danger">Error: ' + response.message + '</div>');
                 }

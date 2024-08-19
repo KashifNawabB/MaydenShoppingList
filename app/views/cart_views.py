@@ -42,6 +42,7 @@ def add_to_cart(request):
                 return JsonResponse({'success': True, 'incremented': True})
             else:
                 # Item does not exist, create a new one
+
                 # Retrieve the maximum value of the 'order' field
                 max_order = Item.objects.filter(shopping_list=shopping_list).aggregate(models.Max('order'))['order__max']
 
@@ -112,7 +113,7 @@ def update_quantity(request):
         data = json.loads(request.body)
         product_id = data.get('product_id')
         new_quantity = data.get('quantity')
-        print(data)
+
         # Fetch the item and update quantity
         item = get_object_or_404(Item, id=product_id)
         if item:
@@ -135,6 +136,7 @@ def update_cart_order(request):
         data = json.loads(request.body)
         order = data.get('order', [])
 
+        # gathering cart items with update order, list index is serving as order
         for index, item_id in enumerate(order):
             try:
                 item = Item.objects.get(id=item_id)
@@ -154,9 +156,12 @@ def share_cart(request):
         shopping_list_id = request.POST.get('shopping_list_id')
         shopping_list = get_object_or_404(ShoppingList, id=shopping_list_id)
         cart_items = shopping_list.items.all()
+
+        # if cart is empty, return message
         if cart_items.count() < 1:
             return JsonResponse({'success': False, 'message': 'Cart is empty.'})
 
+        # collecting cart items for sharing in email
         cart_content = "\n".join([
                         f"{item.name} - {item.quantity} x £{item.price} {'(Bought)' if item.bought else ''}"
                         for item in cart_items

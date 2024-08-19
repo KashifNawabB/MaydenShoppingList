@@ -1,6 +1,6 @@
 from app.models import Item, ShoppingList
 
-
+# function to calculate total price and exceeding amount form set limit
 def update_expense(user):
     cart = Item.objects.filter(shopping_list__user=user).order_by('order')
     shopping_list = ShoppingList.objects.filter(user=user).order_by('-created_at').first()
@@ -8,7 +8,10 @@ def update_expense(user):
     # Calculate total price
     total_price = sum(item.total_cost for item in cart)
     # Calculate if the total price exceeds the spending limit
-    spending_limit = shopping_list.spending_limit or 0
+    if shopping_list is None:
+        spending_limit = 0
+    else:
+        spending_limit = shopping_list.spending_limit or 0
     exceeds_limit = total_price > spending_limit
     exceed_amount = total_price - spending_limit if exceeds_limit else 0
     data = {

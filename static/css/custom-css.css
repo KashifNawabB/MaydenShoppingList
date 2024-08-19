@@ -1,4 +1,4 @@
-/* Common container styles */
+/*container styles */
 .full-height-container {
     height: 100vh;
     display: flex;
@@ -7,7 +7,7 @@
     background-color: #f8f9fa;
 }
 
-/* Common card styles */
+/*card styles */
 .card-styles {
     padding: 2rem;
     border-radius: 8px;
@@ -28,7 +28,7 @@
     font-size: 0.9rem;
 }
 
-/* Specific styles */
+/* login link styles */
 .login-link {
     margin-top: 1rem;
     text-align: center;

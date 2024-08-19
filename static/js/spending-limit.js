@@ -51,7 +51,7 @@ $(document).ready(function() {
 
         editLimitDiv.attr('hidden', true);
 
-        setLimitDiv.children().find('input[type="number"]').val(currentLimit);
+        setLimitDiv.children().find('input[type="number"]').val(currentLimit); //adds current budget limit value to input field for editing
         setLimitDiv.attr('hidden', false);
     });
 

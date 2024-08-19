@@ -6,20 +6,12 @@ import os
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
-
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-9z3ybv@b7t0@*8(d(y)tno+c)+u@_9^x#5!pc_@wjwhiocdchw'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 TEMPLATE_DEBUG = True
-
-# TEMPLATE_DIRS = (
-#     os.path.join(BASE_DIR, 'templates'),
-# )
-
 
 LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "logout"
@@ -137,7 +129,7 @@ STATIC_URL = '/static/'
 
 # This should be a path where static files are collected during `collectstatic`
 STATICFILES_DIRS = [
-    BASE_DIR / "static",  # or just "static" depending on your setup
+    BASE_DIR / "static",
 ]
 
 
