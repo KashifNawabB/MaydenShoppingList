@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% block title %}Home{% endblock %}
+{% block content %}
+    <div class="container mt-5">
+        <!-- Spending Limit Modal -->
+        {% include 'spending-limit-modal.html' %}
+
+        <!--Display budget limit-->
+        <h4 class="text-center mb-4">Your Budget:
+            £<span id="my-budget">{{ shopping_list.spending_limit|default_if_none:"0.00 (Limit not set)" }}</span>
+        </h4>
+
+        <!-- Grocery List Section -->
+        <div class="content row">
+            <div id="grocery-list" class="col-12">
+                <h1 class="mb-4">Pick Up Grocery Items</h1>
+                {% if products %}
+                    <div class="row row-cols-1 row-cols-md-3 g-4">
+                        {% for product in products %}
+                        <div class="col">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ product.name }}</h5>
+                                    <p class="card-text">Price: £{{ product.price }}</p>
+                                    <p class="card-text">Expiry Date: {{ product.expiry_date }}</p>
+                                </div>
+                                <div class="card-footer text-end">
+                                    <button class="btn btn-primary" data-product-id="{{ product.id }}">Add</button>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <h4 class="text-center">No grocery items available</h4>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            $('.btn-primary').on('click', function() {
+                const productId = $(this).data('product-id'); // Get product ID from data attribute
+                $.ajax({
+                    url: '/add-to-cart/',
+                    method: 'POST',
+                    data: JSON.stringify({ 'product_id': productId }),
+                    contentType: 'application/json',
+                    headers: {
+                        'X-CSRFToken': getCSRFToken() // CSRF token
+                    },
+                    success: function(response) {
+                        if (response.success && !response.incremented) {
+                            showPopup('Item added to cart successfully!', 'success');
+                        } else if (response.incremented) {
+                            showPopup('Item quantity increased!', 'success');
+                        } else {
+                            showPopup('Failed to add item to cart.', 'error');
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        showPopup('Failed to add item to cart.', 'error');
+                    }
+                });
+            });
+        });
+    </script>
+
+{% endblock %}

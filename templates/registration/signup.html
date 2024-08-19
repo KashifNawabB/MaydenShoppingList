@@ -1,0 +1,43 @@
+{% extends 'registration/accounts_base.html' %}
+{% block title %}Sign up{% endblock %}
+{% block content %}
+    <div class="full-height-container">
+        <div class="card-styles col-12 col-sm-8 col-md-6 col-lg-4">
+            <h2 class="text-center text-muted">Register</h2>
+            <form method="POST" action="{% url 'signup' %}">
+                {% csrf_token %}
+
+                <div class="form-group mb-3">
+                    <label for="{{ form.username.id_for_label }}" class="form-label">Username</label>
+                    <input type="text" name="{{ form.username.name }}" id="{{ form.username.id_for_label }}" class="form-control" value="{{ form.username.value }}" placeholder="Enter your username">
+                    {% if form.username.errors %}
+                        <span class="text-danger">{{ form.username.errors }}</span>
+                    {% endif %}
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="{{ form.password1.id_for_label }}" class="form-label">Password</label>
+                    <input type="password" name="{{ form.password1.name }}" id="{{ form.password1.id_for_label }}" class="form-control" placeholder="Enter your password">
+                    {% if form.password1.errors %}
+                        <span class="text-danger">{{ form.password1.errors }}</span>
+                    {% endif %}
+                </div>
+
+                <div class="form-group mb-4">
+                    <label for="{{ form.password2.id_for_label }}" class="form-label">Re-enter Password</label>
+                    <input type="password" name="{{ form.password2.name }}" id="{{ form.password2.id_for_label }}" class="form-control" placeholder="Re-enter your password">
+                    {% if form.password2.errors %}
+                        <span class="text-danger">{{ form.password2.errors }}</span>
+                    {% endif %}
+                </div>
+
+                <button type="submit" class="btn btn-primary">Sign Up</button>
+            </form>
+
+            <!-- Login link -->
+            <div class="login-link">
+                <p>Already have an account? <a href="{% url 'login' %}">Login here</a>.</p>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,35 @@
+/* Common container styles */
+.full-height-container {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f8f9fa;
+}
+
+/* Common card styles */
+.card-styles {
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+}
+
+.card-styles h2 {
+    margin-bottom: 1.5rem;
+}
+
+.card-styles .btn-primary {
+    width: 100%;
+}
+
+/* Error message styles */
+.text-danger {
+    font-size: 0.9rem;
+}
+
+/* Specific styles */
+.login-link {
+    margin-top: 1rem;
+    text-align: center;
+}

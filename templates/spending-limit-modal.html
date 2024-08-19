@@ -1,0 +1,26 @@
+<div class="modal fade" id="spendingLimitModal" tabindex="-1" aria-labelledby="spendingLimitModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="spendingLimitModalLabel">Spending Limit</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="edit-limit" {% if not shopping_list.spending_limit %}hidden{% endif %}>
+                    <h4 class="text-center mb-4">Your Budget: £<span id="current-spending-limit">{{ shopping_list.spending_limit }}</span></h4>
+                    <button type="button" class="btn btn-secondary w-100" id="edit-spending-limit">Edit</button>
+                </div>
+                <div class="set-limit" {% if shopping_list.spending_limit %}hidden{% endif %}>
+                    <div class="mb-3">
+                        <label for="spending-limit" class="form-label">Spending Limit</label>
+                        <input type="number" class="form-control" id="spending-limit" placeholder="Enter spending limit" step="0.01" min="0">
+                    </div>
+                    <button type="button" class="btn btn-secondary w-100" id="btn-set-limit">Set Limit</button>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

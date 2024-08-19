@@ -1,0 +1,103 @@
+    {% extends 'base.html' %}
+    {% load static %}
+    {% load custom_filters %}
+
+    {% block title %}My Cart{% endblock %}
+    {% block extra_js %}
+        <script src="{% static 'js/cart.js' %}"></script>
+    {% endblock %}
+    {% block content %}
+        <!-- Spending Limit Modal -->
+        {% include 'spending-limit-modal.html' %}
+
+        <!--Display budget limit-->
+        <h4 class="text-center mb-4">Your Budget:
+            £<span id="my-budget">{{ shopping_list.spending_limit|default_if_none:"0.00 (Limit not set)" }}</span>
+        </h4>
+
+        <div class="content row">
+            <div id="cart-items" class="col-12 col-md-8 mx-auto">
+                <h1 class="mb-4">Your Items</h1>
+
+                {% if cart.count > 0 %}
+                    <div class="card mb-3">
+                        <!-- Header Row -->
+                        <div class="card-header">
+                            <div class="row">
+                                <div class="col-4"><strong>Item</strong></div>
+                                <div class="col-2"><strong>Quantity</strong></div>
+                                <div class="col-2 text-center"><strong>Status</strong></div>
+                                <div class="col-2 text-end"><strong>Actions</strong></div>
+                            </div>
+                        </div>
+                        <!-- Item Rows -->
+                    <div id="cart-items-container">
+                        {% for product in cart %}
+                            <div class="card-body border-bottom draggable-item" data-item-id="{{ product.id }}">
+                                <div class="row align-items-center {% if product.bought %}bg-success-subtle{% endif %}">
+                                    <div class="col-4">
+                                        <h5 class="card-title">{{ product.name }}</h5>
+                                        <p class="card-text text-muted">£{{ product.price }}</p>
+                                    </div>
+                                    <div class="col-2" data-product-id="{{ product.id }}">
+                                        <input type="number" class="form-control quantity-input" {% if product.bought %}disabled{% endif %} value="{{ product.quantity }}" min="1">
+                                    </div>
+                                    <div class="col-2 text-center">
+                                        <input type="checkbox" class="form-check-input mark-bought" data-product-id="{{ product.id }}" {% if product.bought %}checked{% endif %}>
+                                        <label class="form-check-label">Bought</label>
+                                    </div>
+                                    <div class="col-2 text-end">
+                                        <button class="btn btn-outline-danger remove-item" data-index="{{ product.id }}">Remove</button>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                        <div class="text-start mb-1 mt-2">
+                        {% if total_price %}
+                            <h5> Total Price: £<span id="total-price">{{ total_price }}</span></h5>
+                        {% endif %}
+
+                            <div class="alert alert-warning" {% if not exceeds_limit %}hidden{% endif %}>
+                                Your total exceeds the spending limit by £<span id="exceed-amount">{{ exceed_amount }}</span>
+                            </div>
+{#                        {% endif %}#}
+                    </div>
+                    </div>
+                    <!-- Optionally include a proceed to checkout button here -->
+                    <div class="text-end">
+                        <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#shareCartModal">
+                            Share Cart via Email
+                        </button>
+                    </div>
+                {% else %}
+                    <h4 class="text-center">There's nothing in your cart</h4>
+                {% endif %}
+            </div>
+
+        <!-- Share Cart Modal -->
+        <div class="modal fade" id="shareCartModal" tabindex="-1" aria-labelledby="shareCartModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="shareCartModalLabel">Share Your Cart</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="shareCartForm">
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email address</label>
+                                <input type="email" class="form-control" id="email" required>
+                            </div>
+                            <input type="hidden" id="shopping_list_id" value="{{ shopping_list.id }}">
+                            <button type="submit" class="btn btn-primary">Share Cart</button>
+                        </form>
+                        <div id="shareCartMessage" class="mt-3"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+
+    {% endblock %}
